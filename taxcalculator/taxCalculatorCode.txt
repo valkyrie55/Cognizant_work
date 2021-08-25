@@ -1,0 +1,251 @@
+package caseStudy;
+
+import java.util.Scanner;
+import java.sql.*;
+
+class TaxCalculator {
+
+	private String EmployeeNationality;
+	private String Name;
+	private int Salary;
+	
+	public TaxCalculator(String id, String name,int salary) {
+		this.EmployeeNationality= id;
+		this.Name = name;
+		this.Salary=salary;
+		
+	}
+	public void setDetails(String id, String name,int salary) {
+		this.EmployeeNationality= id;
+		this.Name = name;
+		this.Salary=salary;
+	}
+	
+	public String getID() {
+		return this.EmployeeNationality;
+	}
+	public String getName() {
+		return this.Name;
+	}
+	public int getSalary() {
+		return this.Salary;
+	}
+	
+	public static boolean isNumeric(final String str) {
+
+        // null or empty
+        if (str == null || str.length() == 0) {
+            return false;
+        }
+
+       
+        return true;
+
+    }
+	public static boolean num(final int n) {
+
+        // null or empty
+        if ( n <= 0) {
+            return false;
+        }
+
+       
+        return true;
+
+    }
+	
+	public static boolean
+    onlyDigits(String str) 
+    { 
+		int n=str.length();
+        // Traverse the string from 
+        // start to end 
+        for (int i = 0; i < n; i++) { 
+  
+            // Check if character is 
+            // digit from 0-9 
+            // then return true 
+            // else false 
+            if (str.charAt(i) >= '0'
+                && str.charAt(i) <= '9') { 
+                return true; 
+            } 
+            else { 
+                return false; 
+            } 
+        } 
+        return false; 
+    } 
+	public static boolean
+    m(String str) {
+		
+	String sample = str;
+    char[] chars = sample.toCharArray();
+    StringBuilder sb = new StringBuilder();
+    for(char c : chars){
+       if(Character.isDigit(c)){
+          return true;
+       }
+    }
+    return false;
+    
+ }
+	
+	public double calculateTax() {
+		double taxAmount = 0.0;
+			
+		//---------------------EmployeeNationality
+		if(!"Indian".equals(EmployeeNationality)||isNumeric(EmployeeNationality)==false) {
+			System.out.println("CountryNotValidException"+" "+"The employee should be an Indian citizen for calculating tax.");
+		System.exit(0);
+		}
+		else
+		{
+		System.out.println(this.EmployeeNationality + " "  + " "+"Valid");
+		
+	      
+		}
+		
+		//------------------------Name
+		if(isNumeric(Name)==false||onlyDigits(Name)==true||m(Name)==true) {
+			System.out.println("EmployeeNameInvalidException"+" "+"The employee name cannot be empty or null or numeric");
+		System.exit(0);
+	}
+		else
+			System.out.println(this.Name + " "  + " "+"Valid");
+		
+		//------------------------Salary
+		
+		if(num(Salary)==false) {
+			System.out.println("ValidationFailedException"+" "+" ");
+		System.exit(0);
+	}
+		else
+		{
+			int p=0,r,cess;
+			
+			int a=12500,b=25000,c=37500,d=50000,e=62500,f=177600;
+			
+			
+			
+			if(Salary<250000) {
+				taxAmount = 0;
+				System.out.println("The employee does not need to pay tax "+" "+"Your Tax amount is"+" "+"0");
+				
+				
+			}
+			
+			else if(Salary>250000 && Salary<=500000) {
+				
+				r=Salary-250000;
+				p=p+(r*5)/100;
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+				
+				
+			}
+			else if(Salary> 500000 && Salary<=750000) {
+				r=Salary-500000;
+				p=p+a+(r*10/100);
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+						
+				
+			}
+			else if(Salary>750000 && Salary<=1000000) {
+				r=Salary-750000;
+				p=p+a+b+(r*15)/100;
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+				
+				
+			}
+			
+			else if(Salary>1000000 && Salary<=1250000) {
+				r=Salary-1000000;
+				p=p+a+b+c+((r*20)/100);
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+	
+				
+			}
+			else if(Salary>1250000 && Salary<=1500000) {
+				r=Salary-1250000;
+				p=p+a+b+c+d+(r*25)/100;
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+								
+				
+			}
+			else if(Salary>1500000) {
+				r= Salary-1500000;
+				p=p+a+b+c+d+e+(r*30)/100;
+				cess=(p*4)/100;
+				taxAmount = cess+p;
+				
+			}			
+		}
+		
+		return taxAmount;
+	}
+}
+
+public class CalculatorSimulator {     // main class
+
+	public static void main(String[] args) throws Exception {
+		@SuppressWarnings("resource")
+		double tax = 0;
+		Scanner scnr = new Scanner(System.in);
+		System.out.println("Enter the number of Employees");
+		int num = scnr.nextInt();
+		scnr.nextLine();
+		
+
+		TaxCalculator[] myarr = new TaxCalculator[num];
+
+
+		for(int i = 0; i < num; i++) {
+			System.out.println("Enter Your Nationality");
+			String id = scnr.nextLine();
+			System.out.println("Enter Your Name");
+			String name = scnr.nextLine();
+			System.out.println("Enter Your Salary");
+			int salary = scnr.nextInt();
+			
+			myarr[i] = new TaxCalculator(id, name,salary);
+			
+		}  
+
+
+		for(int j = 0; j < myarr.length; j++) {
+			tax = myarr[j].calculateTax();
+			System.out.println("YOUR TOTAL TAX :"+" "+tax);
+			System.out.println("Thankyou for visiting KMPS");
+		}
+		
+		String url = "jdbc:mysql://localhost:3306/manas";
+		String uname = "root";
+		String pass = "12345";
+		try{
+		
+		String query = "insert into employee values (?,?,?,?)";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection con = DriverManager.getConnection(url,uname,pass);
+		PreparedStatement st = con.prepareStatement(query);
+		st.setString(1,myarr[0].getName());
+		st.setString(2,myarr[0].getID());
+		st.setInt(3, myarr[0].getSalary());
+		st.setInt(4,tax);
+		int count = st.executeUpdate();
+		System.out.println("Data inserted successfully");
+		//System.out.println("Data has been inserted into the database!!! ---->"+count+" rows effected");
+		}
+		catch(Exception e){
+			System.out.println(e);
+		}
+		finally{
+		st.close();
+		con.close();
+		       }
+		}	
+		}
